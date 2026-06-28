@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Kula Water & Rain dashboard</title>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 10px;
+        }
+
+        /* Center the entire dashboard and limit width */
+        #dashboard-container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .chart-box {
+            flex: 1;
+            min-width: 0;
+            border: 1px solid #ccc;
+            padding: 5px;
+            height: 350px;
+        }
+
+        /* Toggle Bar + Last Updated */
+        #top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        #toggle-bar button {
+            padding: 6px 12px;
+            margin-right: 8px;
+            border: 1px solid #888;
+            background: #eee;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        #toggle-bar button.active {
+            background: #4285f4;
+            color: white;
+            border-color: #3367d6;
+        }
+
+        /* Last Updated Box */
+        #last-updated-box {
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+            background: #fafafa;
+            border-radius: 6px;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+
+        /* Summary boxes always side-by-side */
+        .summary-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .summary-box {
+            flex: 1;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: #fafafa;
+            border-radius: 6px;
+        }
+
+        .summary-box h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .summary-box div {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+
+<body>
+<div id="dashboard-container">
+
+<h2>Kula Water & Rain</h2>
+
+<!-- Top Bar: Toggle + Last Updated -->
+<div id="top-bar">
+    <div id="toggle-bar">
+        <button data-range="24-hr" class="active">24‑hr</button>
+        <button data-range="48-hr">48‑hr</button>
+        <button data-range="7-day">7‑day</button>
+    </div>
+
+    <div id="last-updated-box">
+        Last Updated:<br>
+        <span id="lu-date"></span> @ <span id="lu-time"></span>
+    </div>
+</div>
+
+<!-- Water Chart -->
+<div class="row">
+    <div id="water-chart" class="chart-box"></div>
+</div>
+
+<!-- Summary Boxes -->
+<div class="summary-row">
+    <div class="summary-box" id="water-summary">
+        <h3>Water Summary</h3>
+        <div>Current GPM: <span id="w-current"></span></div>
+        <div>Today: <span id="w-today"></span></div>
+        <div>Yesterday: <span id="w-yesterday"></span></div>
+        <div>Last 7 Days: <span id="w-7day"></span></div>
+        <div>Month-to-Date: <span id="w-mtd"></span></div>
+        <div>Last Month: <span id="w-lastmonth"></span></div>
+        <div>Year-to-Date: <span id="w-ytd"></span></div>
+    </div>
+
+    <div class="summary-box" id="rain-summary">
+        <h3>Rain Summary</h3>
+        <div>Current IPM: <span id="r-current"></span></div>
+        <div>Today: <span id="r-today"></span></div>
+        <div>Yesterday: <span id="r-yesterday"></span></div>
+        <div>Last 7 Days: <span id="r-7day"></span></div>
+        <div>Month-to-Date: <span id="r-mtd"></span></div>
+        <div>Last Month: <span id="r-lastmonth"></span></div>
+        <div>Year-to-Date: <span id="r-ytd"></span></div>
+    </div>
+</div>
+
+<!-- Rain Chart -->
+<div class="row">
+    <div id="rain-chart" class="chart-box"></div>
+</div>
+
+</div> <!-- end dashboard container -->
+
+<script>
+// === CONFIG ===
+const SPREADSHEET_ID = '1FwObdhlJ_sqodWF5ixiKOdH1HgWQ8c_ZdQjfn5tIZ1E';
+const API_KEY = 'AIzaSyAcrjsH2ysb0vZDyc7NBnf3AQrW3PzizH4';
+
+// === FORMATTER ===
+function fmt(x) {
+    const n = Number(x);
+    return isNaN(n) ? x : n.toFixed(2);
+}
+
+// === BUILD CHARTS ===
+function buildCharts(sheetRange) {
+
+    // WATER CHART
+    Highcharts.chart('water-chart', {
+        data: {
+            googleSpreadsheetKey: SPREADSHEET_ID,
+            googleSpreadsheetRange: `${sheetRange}!A:G`,
+            googleAPIKey: API_KEY,
+            seriesMapping: [
+                { x: 0, y: 2 },
+                { x: 0, y: 3 }
+            ],
+            firstRowAsNames: true,
+            enablePolling: true,
+            dataRefreshRate: 60
+        },
+        chart: { type: 'line' },
+        title: { text: 'Water Meter' },
+        xAxis: { type: 'datetime' },
+        yAxis: [
+            { title: { text: 'Flow Rate (GPM)' }, min: 0 },
+            { title: { text: 'Total Gallons' }, opposite: true, min: 0 }
+        ],
+        series: [
+            { yAxis: 0, name: 'GPM', visible: true, showInLegend: true },
+            { yAxis: 1, name: 'Total Gallons', visible: true, showInLegend: true },
+            { visible: false, showInLegend: false },
+            { visible: false, showInLegend: false },
+            { visible: false, showInLegend: false },
+            { visible: false, showInLegend: false }
+        ]
+    });
+
+    // RAIN CHART
+    Highcharts.chart('rain-chart', {
+        data: {
+            googleSpreadsheetKey: SPREADSHEET_ID,
+            googleSpreadsheetRange: `${sheetRange}!A:G`,
+            googleAPIKey: API_KEY,
+            seriesMapping: [
+                { x: 0, y: 5 },
+                { x: 0, y: 6 }
+            ],
+            firstRowAsNames: true,
+            enablePolling: true,
+            dataRefreshRate: 60
+        },
+        chart: { type: 'line' },
+        title: { text: 'Rain Gauge' },
+        xAxis: { type: 'datetime' },
+        yAxis: [
+            { title: { text: 'Rain Rate (IPM)' }, min: 0 },
+            { title: { text: 'Total Rain (in)' }, opposite: true, min: 0 }
+        ],
+        series: [
+            { yAxis: 0, name: 'IPM', visible: true, showInLegend: true },
+            { yAxis: 1, name: 'Total Rain', visible: true, showInLegend: true },
+            { visible: false, showInLegend: false },
+            { visible: false, showInLegend: false },
+            { visible: false, showInLegend: false },
+            { visible: false, showInLegend: false }
+        ]
+    });
+}
+
+// === LOAD SUMMARY BOXES + LAST UPDATED ===
+function loadSummary() {
+    Highcharts.data({
+        googleSpreadsheetKey: SPREADSHEET_ID,
+        googleSpreadsheetRange: 'Summary!A:C',
+        googleAPIKey: API_KEY,
+        parsed: function (columns) {
+
+            // Last Updated (Summary!B2)
+const ts = columns[1][1];   // full timestamp string
+
+if (ts && ts.includes(" ")) {
+    const [datePart, timePart] = ts.split(" ");
+    document.getElementById('lu-date').textContent = datePart;
+    document.getElementById('lu-time').textContent = timePart;
+} else {
+    // fallback if something unexpected happens
+    document.getElementById('lu-date').textContent = ts || "";
+    document.getElementById('lu-time').textContent = "";
+}
+
+
+
+            // Water summary (B7–B13)
+            const w = columns[1].slice(6, 13);
+            document.getElementById('w-current').textContent = fmt(w[0]);
+            document.getElementById('w-today').textContent = fmt(w[1]);
+            document.getElementById('w-yesterday').textContent = fmt(w[2]);
+            document.getElementById('w-7day').textContent = fmt(w[3]);
+            document.getElementById('w-mtd').textContent = fmt(w[4]);
+            document.getElementById('w-lastmonth').textContent = fmt(w[5]);
+            document.getElementById('w-ytd').textContent = fmt(w[6]);
+
+            // Rain summary (B18–B24)
+            const r = columns[1].slice(17, 24);
+            document.getElementById('r-current').textContent = fmt(r[0]);
+            document.getElementById('r-today').textContent = fmt(r[1]);
+            document.getElementById('r-yesterday').textContent = fmt(r[2]);
+            document.getElementById('r-7day').textContent = fmt(r[3]);
+            document.getElementById('r-mtd').textContent = fmt(r[4]);
+            document.getElementById('r-lastmonth').textContent = fmt(r[5]);
+            document.getElementById('r-ytd').textContent = fmt(r[6]);
+        }
+    });
+}
+
+// === INITIAL LOAD ===
+buildCharts('24-hr');
+loadSummary();
+
+// === AUTO-REFRESH SUMMARY EVERY 60 SECONDS ===
+setInterval(loadSummary, 60000);
+
+// === TOGGLE HANDLER ===
+document.querySelectorAll('#toggle-bar button').forEach(btn => {
+    btn.addEventListener('click', () => {
+
+        document.querySelectorAll('#toggle-bar button')
+            .forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        buildCharts(btn.dataset.range);
+        loadSummary();   // refresh stats immediately
+    });
+});
+
+
+</script>
+
+</body>
+</html>
