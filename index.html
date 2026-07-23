@@ -88,18 +88,23 @@
     margin-bottom: 8px;
 }
 
-/* REPLACEMENT BLOCK — this replaces your old .summary-box div rule */
+/* Each summary row becomes a 2‑column layout */
 .summary-box div {
     margin: 4px 0;
-    display: flex;                 /* new */
-    justify-content: flex-end;     /* new */
+    display: flex;
 }
 
-/* Right‑justify the numeric values */
+/* Left column: labels, right‑aligned */
+.summary-box div {
+    flex: 1;
+    text-align: right;
+}
+
+/* Right column: values, right‑aligned, fixed width */
 .summary-box span {
-    text-align: right;             /* new */
-    min-width: 4.5rem;             /* new */
-    display: inline-block;         /* new */
+    min-width: 6rem;     /* adjust to fit your widest water values */
+    text-align: right;
+    display: inline-block;
 }
     </style>
 </head>
