@@ -67,30 +67,40 @@
             white-space: nowrap;
         }
 
-        /* Summary boxes always side-by-side */
-        .summary-row {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-        }
+       /* Summary boxes always side-by-side */
+.summary-row {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
 
-        .summary-box {
-            flex: 1;
-            border: 1px solid #ccc;
-            padding: 10px;
-            background: #fafafa;
-            border-radius: 6px;
-			font-size: 1.7em
-        }
+.summary-box {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: #fafafa;
+    border-radius: 6px;
+    font-size: 1.7em;
+}
 
-        .summary-box h3 {
-            margin-top: 0;
-            margin-bottom: 8px;
-        }
+.summary-box h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
 
-        .summary-box div {
-            margin: 4px 0;
-        }
+/* REPLACEMENT BLOCK — this replaces your old .summary-box div rule */
+.summary-box div {
+    margin: 4px 0;
+    display: flex;                 /* new */
+    justify-content: space-between;/* new */
+}
+
+/* Right‑justify the numeric values */
+.summary-box span {
+    text-align: right;             /* new */
+    min-width: 4.5rem;             /* new */
+    display: inline-block;         /* new */
+}
     </style>
 </head>
 
