@@ -92,22 +92,22 @@
 .summary-box div {
     margin: 4px 0;
     display: flex;
-    justify-content: flex-end;   /* push both columns right */
-    gap: 10px;                   /* spacing between label and value */
 }
 
-/* Turn the label text into its own flex item */
+/* Label column (right-aligned, fixed width) */
 .summary-box div::before {
-    content: attr(data-label);   /* pull label text from a custom attribute */
-    flex: 1;                     /* label column */
-    text-align: right;           /* right-align label */
+    content: attr(data-label);
+    display: inline-block;
+    width: 14rem;          /* ← adjust this width to taste */
+    text-align: right;
+    padding-right: 1rem;   /* ← spacing between label and value */
 }
 
-/* Value column */
+/* Value column (right-aligned, fixed width) */
 .summary-box span {
-    min-width: 6rem;
-    text-align: right;
     display: inline-block;
+    width: 8rem;           /* ← adjust to fit your largest water values */
+    text-align: right;
 }
 
     </style>
