@@ -94,13 +94,19 @@
     display: flex;
 }
 
+/* Two-column layout */
+.summary-box div {
+    margin: 4px 0;
+    display: flex;
+}
+
 /* Label column (right-aligned, fixed width) */
 .summary-box div::before {
     content: attr(data-label);
     display: inline-block;
-    width: 20rem;          /* ← adjust this width to taste */
+    width: 14rem;          /* ← adjust this width to taste */
     text-align: right;
-    padding-right: 5rem;   /* ← spacing between label and value */
+    padding-right: 1rem;   /* ← spacing between label and value */
 }
 
 /* Value column (right-aligned, fixed width) */
@@ -109,6 +115,7 @@
     width: 8rem;           /* ← adjust to fit your largest water values */
     text-align: right;
 }
+
 
     </style>
 </head>
