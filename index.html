@@ -88,24 +88,28 @@
     margin-bottom: 8px;
 }
 
-/* Each summary row becomes a 2‑column layout */
+/* Two-column layout */
 .summary-box div {
     margin: 4px 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;   /* push both columns right */
+    gap: 10px;                   /* spacing between label and value */
 }
 
-/* Left column: labels, right‑aligned */
-.summary-box div {
-    text-align: right;
+/* Turn the label text into its own flex item */
+.summary-box div::before {
+    content: attr(data-label);   /* pull label text from a custom attribute */
+    flex: 1;                     /* label column */
+    text-align: right;           /* right-align label */
 }
 
-/* Right column: values, right‑aligned, fixed width */
+/* Value column */
 .summary-box span {
-    min-width: 6rem;     /* adjust to fit your widest water values */
+    min-width: 6rem;
     text-align: right;
     display: inline-block;
 }
+
     </style>
 </head>
 
