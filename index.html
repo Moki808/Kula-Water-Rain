@@ -92,28 +92,23 @@
 .summary-box div {
     margin: 4px 0;
     display: flex;
-    justify-content: flex-start;   /* keep columns anchored left */
-    align-items: center;            /* vertical alignment */
 }
 
 /* Label column */
-.summary-box div::before {
-    content: attr(data-label);
+.summary-box .label {
     display: inline-block;
-    width: 14rem;                   /* ← adjust as needed */
+    width: 14rem;          /* adjust as needed */
     text-align: right;
-    white-space: nowrap;            /* ← prevents wrapping */
-    padding-right: 1rem;            /* ← spacing between label and value */
-    flex-shrink: 0;                 /* ← prevents label from shrinking */
+    padding-right: 1rem;   /* spacing between label and value */
+    white-space: nowrap;   /* prevents wrapping */
 }
 
 /* Value column */
-.summary-box span {
+.summary-box span:not(.label) {
     display: inline-block;
-    width: 8rem;                    /* ← adjust to fit your largest water values */
+    width: 8rem;           /* adjust to fit your largest water values */
     text-align: right;
-    white-space: nowrap;            /* ← prevents wrapping */
-    flex-shrink: 0;                 /* ← prevents value from shrinking */
+    white-space: nowrap;
 }
     </style>
 </head>
@@ -147,26 +142,29 @@
 <div class="summary-row">
     <div class="summary-box" id="water-summary">
         <h3>Water Summary</h3>
-        <div>Current GPM: <span id="w-current"></span></div>
-        <div>Today (gal): <span id="w-today"></span></div>
-        <div>Yesterday (gal): <span id="w-yesterday"></span></div>
-        <div>Last 7 Days (gal): <span id="w-7day"></span></div>
-        <div>Month-to-Date (gal): <span id="w-mtd"></span></div>
-        <div>Last Month (gal): <span id="w-lastmonth"></span></div>
-        <div>Year-to-Date (gal): <span id="w-ytd"></span></div>
+
+        <div><span class="label">Current GPM:</span><span id="w-current"></span></div>
+        <div><span class="label">Today (gal):</span><span id="w-today"></span></div>
+        <div><span class="label">Yesterday (gal):</span><span id="w-yesterday"></span></div>
+        <div><span class="label">Last 7 Days (gal):</span><span id="w-7day"></span></div>
+        <div><span class="label">Month-to-Date (gal):</span><span id="w-mtd"></span></div>
+        <div><span class="label">Last Month (gal):</span><span id="w-lastmonth"></span></div>
+        <div><span class="label">Year-to-Date (gal):</span><span id="w-ytd"></span></div>
     </div>
 
     <div class="summary-box" id="rain-summary">
         <h3>Rain Summary</h3>
-        <div>Last Hour (in): <span id="r-current"></span></div>
-        <div>Today (in): <span id="r-today"></span></div>
-        <div>Yesterday (in): <span id="r-yesterday"></span></div>
-        <div>Last 7 Days (in): <span id="r-7day"></span></div>
-        <div>Month-to-Date (in): <span id="r-mtd"></span></div>
-        <div>Last Month (in): <span id="r-lastmonth"></span></div>
-        <div>Year-to-Date (in): <span id="r-ytd"></span></div>
+
+        <div><span class="label">Last Hour (in):</span><span id="r-current"></span></div>
+        <div><span class="label">Today (in):</span><span id="r-today"></span></div>
+        <div><span class="label">Yesterday (in):</span><span id="r-yesterday"></span></div>
+        <div><span class="label">Last 7 Days (in):</span><span id="r-7day"></span></div>
+        <div><span class="label">Month-to-Date (in):</span><span id="r-mtd"></span></div>
+        <div><span class="label">Last Month (in):</span><span id="r-lastmonth"></span></div>
+        <div><span class="label">Year-to-Date (in):</span><span id="r-ytd"></span></div>
     </div>
 </div>
+
 
 <!-- Rain Chart -->
 <div class="row">
