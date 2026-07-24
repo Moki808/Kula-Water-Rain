@@ -92,15 +92,21 @@
 .summary-box div {
     margin: 4px 0;
     display: flex;
-    justify-content: space-between;   /* creates two columns */
+    justify-content: space-between;
+}
+
+/* Left column: labels, right‑aligned */
+.summary-box div {
+    text-align: right;
 }
 
 /* Right column: values, right‑aligned, fixed width */
 .summary-box span {
-    min-width: 6rem;                  /* adjust as needed */
+    min-width: 6rem;     /* adjust to fit your widest water values */
     text-align: right;
     display: inline-block;
 }
+
 
     </style>
 </head>
