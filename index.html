@@ -92,31 +92,29 @@
 .summary-box div {
     margin: 4px 0;
     display: flex;
+    justify-content: flex-start;   /* keep columns anchored left */
+    align-items: center;            /* vertical alignment */
 }
 
-/* Two-column layout */
-.summary-box div {
-    margin: 4px 0;
-    display: flex;
-}
-
-/* Label column (right-aligned, fixed width) */
+/* Label column */
 .summary-box div::before {
     content: attr(data-label);
     display: inline-block;
-    width: 14rem;          /* ← adjust this width to taste */
+    width: 14rem;                   /* ← adjust as needed */
     text-align: right;
-    padding-right: 1rem;   /* ← spacing between label and value */
+    white-space: nowrap;            /* ← prevents wrapping */
+    padding-right: 1rem;            /* ← spacing between label and value */
+    flex-shrink: 0;                 /* ← prevents label from shrinking */
 }
 
-/* Value column (right-aligned, fixed width) */
+/* Value column */
 .summary-box span {
     display: inline-block;
-    width: 8rem;           /* ← adjust to fit your largest water values */
+    width: 8rem;                    /* ← adjust to fit your largest water values */
     text-align: right;
+    white-space: nowrap;            /* ← prevents wrapping */
+    flex-shrink: 0;                 /* ← prevents value from shrinking */
 }
-
-
     </style>
 </head>
 
